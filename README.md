@@ -7,6 +7,3 @@ To run on android, setup your development environment and then issue the followi
 ionic platform add android
 ionic run
 ```
-
-### Liecense
-MIT
