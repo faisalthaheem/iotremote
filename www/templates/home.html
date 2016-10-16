@@ -1,0 +1,39 @@
+<ion-view view-title="Connected Devices">
+  <ion-content>
+	<div class="card">
+	  <div class="item item-divider">
+	    Broker Connection
+	  </div>
+	  <div class="item item-toggle">
+		Connection to broker
+		<label class="toggle">
+		   <input type="checkbox" ng-click="toggleBrokerConnection()" ng-model="deviceStates.broker">
+		   <div class="track">
+		     <div class="handle"></div>
+		   </div>
+		</label>
+	  </div>
+	  <div class="item item-divider">
+	    Connection state: {{deviceStatesText.brokerState}}
+	  </div>
+	</div>
+
+	<div class="card">
+	  <div class="item item-divider">
+	    Water Pump
+	  </div>
+	  <div class="item item-toggle">
+		Toggle pump state
+		<label class="toggle">
+		   <input type="checkbox" ng-click="togglePumpState()" ng-model="deviceStates.pump">
+		   <div class="track">
+		     <div class="handle"></div>
+		   </div>
+		</label>
+	  </div>
+	  <div class="item item-divider">
+	    The pump is switched {{deviceStatesText.pumpState}}
+	  </div>
+	</div>
+  </ion-content>
+</ion-view>
