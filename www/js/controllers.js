@@ -1,13 +1,13 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop) {
-
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService) {
 
 	//form data for devices
 	$scope.deviceStates = {};
 	$scope.deviceStatesText = {};
 	$scope.deviceStatesText.brokerState = "disconnected";
 	$scope.deviceStatesText.pumpState = "off";
+	$scope.scheduledJobs = [];
 
 	$scope.toggleBrokerConnection = function(){
 
@@ -18,9 +18,6 @@ angular.module('starter.controllers', [])
 		}else{
 			$scope.disconnectMQTT();
 		}
-		
-		
-		
 	};
 
 	$scope.togglePumpState = function(){
@@ -70,6 +67,30 @@ angular.module('starter.controllers', [])
 
 	    alert('Operation completed successfully');
 
+	});
+	
+	$scope.reloadJobData = function(){
+		$ionicBackdrop.retain();
+		
+		console.log('Reloading job data');
+		
+		ScheduledJobsService.list().then(function(data){
+			$scope.scheduledJobs = data;
+			$ionicBackdrop.release();
+		});
+	};
+	
+	$scope.$on('$ionicView.beforeEnter', function () {
+		
+		var $currState = $ionicHistory.currentView().stateId;
+		
+		if($currState == 'app.jobs'){
+			console.log('Loading jobs data.');
+			ScheduledJobsService.list().then(function(data){
+				$scope.scheduledJobs = data;
+			});
+			//console.log('# of jobs returned: ' + $scope.scheduledJobs.length);
+		}
 	});
 
 })

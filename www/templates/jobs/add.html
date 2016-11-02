@@ -1,0 +1,35 @@
+<ion-view view-title="Add new Job">
+  <ion-content>
+	<form name="jobForm" ng-submit="add()">
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Job Name</span>
+                    <input required
+                           type="text"
+                           ng-model="jobInfo.jobName"
+                           name="jobName"
+                           title="Job Name"
+                           ng-class="{'has-error': jobForm.jobName.$invalid}">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">CRON Schedule</span>
+                    <input required type="text" ng-model="jobInfo.cronSchedule">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Topic</span>
+                    <input required type="text" ng-model="jobInfo.topic">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Payload</span>
+                    <input required type="text" ng-model="jobInfo.payload">
+                </label>
+            </div>
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <button class="button button-block button-positive" type="submit" ng-disabled="jobForm.$invalid">Submit</button>
+                </div>
+            </div>
+        </form>
+
+  </ion-content>
+</ion-view>

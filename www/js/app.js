@@ -148,7 +148,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
           templateUrl: 'templates/home.html'
         }
       }
-    });
+    })
+	
+	.state('app.jobs', {
+      url: '/jobs',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/jobs/index.html'
+        }
+      }
+    })
+	
+	.state('app.addJob', {
+      url: '/addJob',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/jobs/add.html'
+        }
+      }
+    })
+	;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
