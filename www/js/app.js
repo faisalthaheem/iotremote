@@ -127,10 +127,25 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 		//broadcast event
 		$rootScope.$broadcast('mqtt-message-arrival', { destinationName: message.destinationName, payload: message.payloadString });
 	}
+	
+	$rootScope.S4 = function() {
+		return (((1+Math.random())*0x10000)|0).toString(16).substring(1); 
+	}
+	
+	$rootScope.generateGuid = function(){
+		guid = ($rootScope.S4() + $rootScope.S4() + "-" + $rootScope.S4() + "-4" + $rootScope.S4().substr(0,3) + "-" + $rootScope.S4() + "-" + $rootScope.S4() + $rootScope.S4() + $rootScope.S4()).toLowerCase();
+		return guid;
+	}
 
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+
+	$httpProvider.defaults.headers.common = {};
+	$httpProvider.defaults.headers.post = {};
+	$httpProvider.defaults.headers.put = {};
+	$httpProvider.defaults.headers.patch = {};
+	
   $stateProvider
 
     .state('app', {

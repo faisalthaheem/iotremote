@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, $cordovaInAppBrowser) {
 
 	//form data for devices
 	$scope.deviceStates = {};
@@ -8,6 +8,7 @@ angular.module('starter.controllers', ['starter.services'])
 	$scope.deviceStatesText.brokerState = "disconnected";
 	$scope.deviceStatesText.pumpState = "off";
 	$scope.scheduledJobs = [];
+	$scope.jobInfo = {};
 
 	$scope.toggleBrokerConnection = function(){
 
@@ -78,6 +79,73 @@ angular.module('starter.controllers', ['starter.services'])
 			$scope.scheduledJobs = data;
 			$ionicBackdrop.release();
 		});
+	};
+	
+	$scope.addJob = function(){
+		
+		console.log('Adding new job');
+		
+		$ionicBackdrop.retain();
+		
+		$scope.jobInfo.jobidentifier = $scope.generateGuid();
+		
+		ScheduledJobsService.addJob($scope.jobInfo).then(function(data){
+			
+			if(data.hasOwnProperty('error')){
+				if(data.error === 'true'){
+					alert(data.message);
+				}else{
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.jobs');
+				}
+			}
+			
+			$ionicBackdrop.release();
+		});
+		
+		console.log('Exiting adding new job');
+	};
+	
+	$scope.deleteJob = function(jobId){
+		
+		var job = ScheduledJobsService.get(jobId);
+		
+		var confirmPopup = $ionicPopup.confirm({
+			title: 'Confirm delete job ' + job.jobName + "?",
+			template: 'Confirm to proceed'
+		});
+
+		confirmPopup.then(function(res) {
+			if(res) {
+				
+				$ionicBackdrop.retain();
+				
+				ScheduledJobsService.deleteJob(job).then(function(data){
+			
+					if(data.hasOwnProperty('error')){
+						if(data.error === 'true'){
+							alert(data.message);
+						}else{
+							$scope.reloadJobData();
+						}
+					}
+					$ionicBackdrop.release();
+				});
+				
+				$ionicBackdrop.release();
+			} 
+		});
+	};
+	
+	$scope.showCronHelp = function(){
+		var options = {
+			location: 'yes',
+			clearcache: 'yes',
+			toolbar: 'no'
+		};
+		$cordovaInAppBrowser.open('http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html', '_blank', options);
 	};
 	
 	$scope.$on('$ionicView.beforeEnter', function () {

@@ -10,13 +10,13 @@
   
 	<div class="list card" collection-repeat="job in scheduledJobs">
 		<div class="item item-icon-left">
-			 <i class="icon ion-wand	"></i>
+			<i class="icon ion-wand"></i>
 			<h2>{{job.jobName}}</h2>
 			<p>{{job.cronSchedule}}</p>
 		</div>
 		<div class="item item-body">
 			<p>
-			  <a href="#/jobs/delete/{{job.id}}" class="subdued">Delete</a>
+			  <a ng-click="deleteJob(job.id)" class="subdued">Delete</a>
 			</p>
 		</div>
 	</div>

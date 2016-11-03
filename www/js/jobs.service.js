@@ -5,13 +5,18 @@ angular.module('starter.services', [])
 	
     list : function() {
 		return (
-			$http.get("http://192.168.0.240:4567/listJobs")
-			//$http.get("http://localhost:4567/listJobs")
+			//$http.get("http://192.168.0.240:4567/listJobs")
+			$http.get("http://localhost:4567/listJobs")
 			.then(
 				function(response){
 					jobs = response.data.responseData.jobs;
 					return jobs;
-			})
+				},
+				function(response){
+					console.log('could not reload job data');
+					return [];
+				}
+			)
 		)
     },
 
@@ -24,12 +29,37 @@ angular.module('starter.services', [])
       return undefined;
     },
 
-    remove : function(jobId) {
-      
+    deleteJob : function(jobData) {
+		return (
+			$http.post('http://localhost:4567/deleteJob', jobData)
+			//$http.post('http://192.168.0.240:4567/addJob', jobData)
+			.then(
+				function(response){
+					return response.data;
+				},
+				function(response){
+					console.log('Error invoking service for adding new job');
+					return response;
+				}
+			)
+		)
     },
 
-    add : function(jobName, cronSchedule, topic, payload, jobIdentifier) {
-      
+    addJob : function(jobData) {
+		
+		return (
+			$http.post('http://localhost:4567/addJob', jobData)
+			//$http.post('http://192.168.0.240:4567/addJob', jobData)
+			.then(
+				function(response){
+					return response.data;
+				},
+				function(response){
+					console.log('Error invoking service for adding new job');
+					return response;
+				}
+			)
+		)
     }
   }
 });
