@@ -11,6 +11,10 @@ android:
         - android-23
 jdk:
   - oraclejdk8
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
 before_install:
   - nvm install v4
   - npm i -g npm@^2.0.0
