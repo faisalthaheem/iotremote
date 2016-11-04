@@ -9,6 +9,9 @@ android:
     components:
         - build-tools-23.0.1
         - android-23
+        - extra-android-m2repository
+        - extra-google-m2repository
+        - extra-android-support        
 jdk:
   - oraclejdk8
 licenses:
@@ -18,9 +21,9 @@ licenses:
 before_install:
   - nvm install v4
   - npm i -g npm@^2.0.0
+  - echo y | android update sdk -u --filter android-22,android-23,android-24
   - npm install -g ionic
   - npm install -g cordova
-  - echo y | android update sdk -u --filter android-22,android-23,android-24
 install:
   - npm install
 before_script:
