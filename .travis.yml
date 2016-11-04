@@ -1,31 +1,23 @@
+sudo: false
 language: android
-
-node_js:
-  - "node"
-
+cache:
+  directories:
+    - node_modules
 notifications:
   email: false
-
-sudo: false
-
-branches:
-  only:
-  - master
-
+android:
+    components:
+        - build-tools-23.0.1
+        - android-23
+before_install:
+  - nvm install v4
+  - npm i -g npm@^2.0.0
+  - npm install -g ionic
+  - npm install -g cordova
 install:
-  - npm install -g npm@3.10.7
-  - npm cache clean
   - npm install
-  - npm install -g cordova ionic
-  - echo y | android update sdk -u --filter android-22,android-23
-
 before_script:
-  - cordova platform rm android
-  - cordova platform add android
-
+  - npm prune
+  - ionic platform add android
 script:
-  - cordova prepare
-  - cordova build android --release -- --ant
-  
-release:
-  - exit 0  
+  - ionic build android
