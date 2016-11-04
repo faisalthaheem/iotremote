@@ -13,6 +13,7 @@ branches:
   - master
 
 install:
+  - npm install -g npm@3.10.7
   - npm cache clean
   - npm install
   - npm install -g cordova ionic
