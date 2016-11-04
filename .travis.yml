@@ -16,6 +16,7 @@ before_install:
   - npm i -g npm@^2.0.0
   - npm install -g ionic
   - npm install -g cordova
+  - echo y | android update sdk -u --filter android-22,android-23
 install:
   - npm install
 before_script:
