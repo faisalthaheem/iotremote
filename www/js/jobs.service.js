@@ -36,7 +36,7 @@ angular.module('starter.services.jobs', ['starter.services.settings'])
 
     deleteJob : function(jobData) {
 		return (
-			$http.post(this.getBaseUrl() + "/deleteJob", {timeout: 2000}, jobData)
+			$http.post(this.getBaseUrl() + "/deleteJob", jobData, {timeout: 2000})
 			.then(
 				function(response){
 					return response.data;
@@ -51,8 +51,10 @@ angular.module('starter.services.jobs', ['starter.services.settings'])
 
     addJob : function(jobData) {
 		
+		console.log('Adding new job: ' + JSON.stringify(jobData));
+		
 		return (
-			$http.post(this.getBaseUrl() + "/addJob", {timeout: 2000}, jobData)
+			$http.post(this.getBaseUrl() + "/addJob", jobData, {timeout: 2000})
 			.then(
 				function(response){
 					return response.data;

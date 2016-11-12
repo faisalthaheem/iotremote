@@ -1,5 +1,6 @@
 <ion-view view-title="Scheduled Jobs">
   <ion-content>
+  
 	<button class="button button-block button-balanced" ng-click="reloadJobData()">
 	  Reload Job Data From Server
 	</button>
@@ -11,8 +12,10 @@
 	<div class="list card" collection-repeat="job in scheduledJobs">
 		<div class="item item-icon-left">
 			<i class="icon ion-wand"></i>
-			<h2>{{job.jobName}}</h2>
-			<p>{{job.cronSchedule}}</p>
+			<h2>Name: {{job.jobName}}</h2>
+			<p>Schedule: {{job.cronSchedule}}</p>
+			<p>Topic: {{job.topic}}</p>
+			<p>Payload: {{job.payload}}</p>
 		</div>
 		<div class="item item-body">
 			<p>
@@ -20,6 +23,11 @@
 			</p>
 		</div>
 	</div>
-
+	
+	<div class="card">
+		<div class="item item-text-wrap">
+			end of listing
+		</div>
+	</div>
   </ion-content>
 </ion-view>
