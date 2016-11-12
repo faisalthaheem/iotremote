@@ -1,12 +1,15 @@
-angular.module('starter.services', [])
-.factory('ScheduledJobsService', function($http) {
+angular.module('starter.services.jobs', ['starter.services.settings'])
+.factory('ScheduledJobsService', function($http,SettingsService) {
 
   return {
 	
+	getBaseUrl : function() {
+		return "http://" + SettingsService.getBrokerInfo().ip + ":4567";
+	},
+	
     list : function() {
 		return (
-			//$http.get("http://192.168.0.240:4567/listJobs")
-			$http.get("http://localhost:4567/listJobs")
+			$http.get(this.getBaseUrl() + "/listJobs", {timeout: 2000})
 			.then(
 				function(response){
 					jobs = response.data.responseData.jobs;
@@ -14,6 +17,8 @@ angular.module('starter.services', [])
 				},
 				function(response){
 					console.log('could not reload job data');
+					console.log('Error code: ' + response.status);
+					console.log('Error desc: ' + JSON.stringify(response));
 					return [];
 				}
 			)
@@ -31,8 +36,7 @@ angular.module('starter.services', [])
 
     deleteJob : function(jobData) {
 		return (
-			$http.post('http://localhost:4567/deleteJob', jobData)
-			//$http.post('http://192.168.0.240:4567/addJob', jobData)
+			$http.post(this.getBaseUrl() + "/deleteJob", {timeout: 2000}, jobData)
 			.then(
 				function(response){
 					return response.data;
@@ -48,8 +52,7 @@ angular.module('starter.services', [])
     addJob : function(jobData) {
 		
 		return (
-			$http.post('http://localhost:4567/addJob', jobData)
-			//$http.post('http://192.168.0.240:4567/addJob', jobData)
+			$http.post(this.getBaseUrl() + "/addJob", {timeout: 2000}, jobData)
 			.then(
 				function(response){
 					return response.data;

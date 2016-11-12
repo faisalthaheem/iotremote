@@ -148,7 +148,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 	
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -179,6 +179,22 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
       views: {
         'menuContent': {
           templateUrl: 'templates/jobs/add.html'
+        }
+      }
+    })
+	
+	.state('settings', {
+		url: '/settings',
+		abstract: true,
+		templateUrl: 'templates/menu.html',
+		controller: 'SettingsCtrl'
+	})
+  
+	.state('settings.mqbroker', {
+      url: '/mqbroker',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/settings/mqbroker.html'
         }
       }
     })

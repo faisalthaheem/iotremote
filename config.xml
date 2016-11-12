@@ -25,4 +25,7 @@
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-statusbar" spec="~2.2.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.3" />
+	<!-- https://github.com/apache/cordova-plugin-whitelist -->
+	<allow-intent href="*" />
+	<access origin="*" />
 </widget>

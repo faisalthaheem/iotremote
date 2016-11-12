@@ -1,6 +1,6 @@
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services.jobs','starter.services.settings'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, $cordovaInAppBrowser) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, $cordovaInAppBrowser,$http) {
 
 	//form data for devices
 	$scope.deviceStates = {};
@@ -158,8 +158,48 @@ angular.module('starter.controllers', ['starter.services'])
 				$scope.scheduledJobs = data;
 			});
 			//console.log('# of jobs returned: ' + $scope.scheduledJobs.length);
+			
+			//$http.get(this.getBaseUrl() + "/listJobs", {timeout: 2000})
+			$http.get("http://192.168.0.240:4567/listJobs")
+			.then(
+				function(response){
+					//jobs = response.data.responseData.jobs;
+					return jobs;
+				},
+				function(response){
+					console.log('could not reload job data');
+					console.log('Error code: ' + response.status);
+					console.log('Error desc: ' + JSON.stringify(response));
+					return [];
+				}
+			)
 		}
 	});
 
 })
 
+.controller('SettingsCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, SettingsService, $cordovaInAppBrowser) {
+
+	//form data for devices
+	$scope.brokerInfo = {};
+	
+	$scope.saveSettings = function() {
+		
+		SettingsService.setBrokerInfo($scope.brokerInfo);
+		
+		$ionicPopup.alert({
+			title: 'MQ Broker Settings',
+			template: 'Settings saved successfully.'
+		});
+	};
+
+	$scope.$on('$ionicView.beforeEnter', function () {
+		
+		var $currState = $ionicHistory.currentView().stateId;
+		
+		if($currState == 'settings.mqbroker'){
+			$scope.brokerInfo = SettingsService.getBrokerInfo();
+		};
+	});
+
+})

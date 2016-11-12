@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <title></title>
 
     <link rel="manifest" href="manifest.json">
@@ -35,8 +36,10 @@
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
+	<script src="js/settings.service.js"></script>
+	<script src="js/jobs.service.js"></script>	
     <script src="js/controllers.js"></script>
-	<script src="js/jobs.service.js"></script>
+
   </head>
 
   <body ng-app="starter">
