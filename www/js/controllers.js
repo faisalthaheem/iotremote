@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services.jobs','starter.services.settings'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, $cordovaInAppBrowser,$http) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser) {
 
 	//form data for devices
 	$scope.deviceStates = {};
@@ -153,26 +153,13 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		var $currState = $ionicHistory.currentView().stateId;
 		
 		if($currState == 'app.jobs'){
+			
 			console.log('Loading jobs data.');
+			console.log('Server configuration: ' + JSON.stringify(SettingsService.getBrokerInfo()));
 			ScheduledJobsService.list().then(function(data){
 				$scope.scheduledJobs = data;
 			});
 			//console.log('# of jobs returned: ' + $scope.scheduledJobs.length);
-			
-			//$http.get(this.getBaseUrl() + "/listJobs", {timeout: 2000})
-			$http.get("http://192.168.0.240:4567/listJobs")
-			.then(
-				function(response){
-					//jobs = response.data.responseData.jobs;
-					return jobs;
-				},
-				function(response){
-					console.log('could not reload job data');
-					console.log('Error code: ' + response.status);
-					console.log('Error desc: ' + JSON.stringify(response));
-					return [];
-				}
-			)
 		}
 	});
 
@@ -185,6 +172,7 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 	
 	$scope.saveSettings = function() {
 		
+		console.log('before saving settings: ' + JSON.stringify($scope.brokerInfo));
 		SettingsService.setBrokerInfo($scope.brokerInfo);
 		
 		$ionicPopup.alert({
@@ -194,6 +182,13 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 	};
 
 	$scope.$on('$ionicView.beforeEnter', function () {
+		
+		if(window.localStorage  == undefined){
+			$ionicPopup.alert({
+				title: 'MQ Broker Settings',
+				template: 'Device does not support local storage.'
+			});
+		}
 		
 		var $currState = $ionicHistory.currentView().stateId;
 		
