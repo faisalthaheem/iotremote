@@ -1,0 +1,25 @@
+<ion-view view-title="MQ Broker Settings">
+  <ion-content ng-controller="SettingsCtrl">
+	<form name="settingsForm" ng-submit="saveSettings()">
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">IP Address</span>
+                    <input required
+                           type="text"
+                           ng-model="brokerInfo.ip"
+                           name="ip"
+                           title="IP Address"
+                           ng-class="{'has-error': settingsForm.ip.$invalid}"
+						   ng-pattern="/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/"
+					   >
+                </label>
+            </div>
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <button class="button button-block button-positive" type="submit" ng-disabled="settingsForm.$invalid">Save</button>
+                </div>
+            </div>
+        </form>
+
+  </ion-content>
+</ion-view>

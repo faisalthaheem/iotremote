@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.services.settings'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.services.settings','chart.js'])
 
 .run(function($ionicPlatform,$rootScope,$cordovaDevice,$ionicPopup, $state, $ionicHistory, $ionicBackdrop, SettingsService) {
   $ionicPlatform.ready(function() {
@@ -61,7 +61,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
 						$rootScope.clientConnected = true;
 			
 						//subscribe to the topics
-						$rootScope.client.subscribe("fromPump");
+						$rootScope.client.subscribe("#");
 
 						//broadcast successful connection
 						$rootScope.$broadcast('mqtt-connect-success');
@@ -123,7 +123,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
 
 	// called when a message arrives
 	$rootScope.onMessageArrived = function(message) {
-	  console.log("onMessageArrived:"+message.payloadString);
+	  console.log("onMessageArrived:" + message.destinationName + ' ' + message.payloadString);
 		//broadcast event
 		$rootScope.$broadcast('mqtt-message-arrival', { destinationName: message.destinationName, payload: message.payloadString });
 	}

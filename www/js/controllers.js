@@ -9,6 +9,13 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 	$scope.deviceStatesText.pumpState = "off";
 	$scope.scheduledJobs = [];
 	$scope.jobInfo = {};
+	
+	//chart data
+	$scope.labels = [];
+	$scope.data = [
+		[]
+	];
+	$scope.series = ['W/hr'];
 
 	$scope.toggleBrokerConnection = function(){
 
@@ -46,9 +53,10 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		$ionicBackdrop.release();
 		$scope.deviceStatesText.brokerState = "disconnected";
 
-
-	    alert('Unable to connect, please try again later');
-
+		$ionicPopup.alert({
+			title: 'Connection',
+			template: 'Unable to connect, please try again later.'
+		});
 
 	});
 
@@ -57,7 +65,10 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		$ionicBackdrop.release();
 		$scope.deviceStatesText.brokerState = "connected";
 
-	    alert('Operation completed successfully');
+		$ionicPopup.alert({
+			title: 'Connection',
+			template: 'Operation completed successfully.'
+		});
 
 	});
 
@@ -66,8 +77,27 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		$ionicBackdrop.release();
 		$scope.deviceStatesText.brokerState = "disconnected";
 
-	    alert('Operation completed successfully');
+	    $ionicPopup.alert({
+			title: 'Connection',
+			template: 'Operation completed successfully.'
+		});
 
+	});
+	
+	$scope.$on('mqtt-message-arrival', function(event, args) {
+		
+		if(args.destinationName == 'fromPowerMon'){
+			var currentDate = new Date();
+			
+			$scope.labels.push('' + currentDate.getHours() + ":" + currentDate.getMinutes());
+			$scope.data[0].push(Number(args.payload));
+			//$scope.data[1].push(Number(args.payload)/1000);
+			
+			//console.log('data' + JSON.stringify($scope.data));
+			//console.log('labels' + JSON.stringify($scope.labels));
+			
+			$scope.$apply();
+		}
 	});
 	
 	$scope.reloadJobData = function(){
