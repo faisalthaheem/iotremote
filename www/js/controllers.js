@@ -89,6 +89,11 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		if(args.destinationName == 'fromPowerMon'){
 			var currentDate = new Date();
 			
+			if($scope.labels.length > 10){
+				$scope.labels.shift();
+				$scope.data[0].shift();
+			}
+			
 			$scope.labels.push('' + currentDate.getHours() + ":" + currentDate.getMinutes());
 			$scope.data[0].push(Number(args.payload));
 			//$scope.data[1].push(Number(args.payload)/1000);
