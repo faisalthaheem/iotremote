@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services.jobs','starter.services.settings'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser, $cordovaClipboard, $cordovaToast) {
 
 	//form data for devices
 	$scope.deviceStates = {};
@@ -172,6 +172,19 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 				$ionicBackdrop.release();
 			} 
 		});
+	};
+	
+	$scope.copyToClipboard = function(text){
+		
+		$cordovaClipboard
+			.copy(text)
+			.then(function () {
+				$cordovaToast
+					.show('Schedule copied to clipboard', 'long', 'center');
+			}, function () {
+			  $cordovaToast
+					.show('Something went wrong :(', 'long', 'center');
+			});
 	};
 	
 	$scope.showCronHelp = function(){

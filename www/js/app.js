@@ -25,11 +25,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
 
 
 	$rootScope.getDeviceUUID = function(){
-		if( ionic.Platform.isAndroid() ){
+		if( $cordovaDevice.hasOwnProperty('device') ){
 			
 			return $cordovaDevice.getUUID();
 		}else{
-			console.log("Is not Android");
+			console.log("Does not have a valid device, using test id instead.");
 			
 			return "testUUID";
 		}

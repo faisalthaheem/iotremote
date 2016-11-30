@@ -1,26 +1,25 @@
 <ion-view view-title="Scheduled Jobs">
   <ion-content>
   
-	<button class="button button-block button-balanced" ng-click="reloadJobData()">
-	  Reload Job Data From Server
-	</button>
-	
-	<a class="button button-block button-balanced" href="#/app/addJob">
-	  Add New Job
-	</a>
+	<div class="button-bar">
+	  <a class="button button-balanced icon-left ion-android-refresh" ng-click="reloadJobData()">Reload</a>
+	  <a class="button button-royal icon-left ion-plus-round" href="#/app/addJob">New Job</a>
+	</div>
   
 	<div class="list card" collection-repeat="job in scheduledJobs">
 		<div class="item item-icon-left">
-			<i class="icon ion-wand"></i>
-			<h2>Name: {{job.jobName}}</h2>
+			<i class="icon ion-ios-clock"></i>
+			<h2>{{job.jobName}}</h2>
 			<p>Schedule: {{job.cronSchedule}}</p>
 			<p>Topic: {{job.topic}}</p>
 			<p>Payload: {{job.payload}}</p>
 		</div>
 		<div class="item item-body">
-			<p>
-			  <a ng-click="deleteJob(job.id)" class="subdued">Delete</a>
-			</p>
+			<div class="button-bar">
+			  <a class="button button-assertive icon-left ion-android-delete" ng-click="deleteJob(job.id)">Delete</a>
+			  <a class="button button-dark icon-left ion-clipboard" ng-click="copyToClipboard('{{job.cronSchedule}}')">Copy</a>
+			  <a class="button button-energized icon-left ion-edit">Edit</a>
+			</div>
 		</div>
 	</div>
 	
