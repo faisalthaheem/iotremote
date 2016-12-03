@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services.jobs','starter.services.settings'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser, $cordovaClipboard, $cordovaToast) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser, $cordovaClipboard, $cordovaToast, $stateParams) {
 
 	//form data for devices
 	$scope.deviceStates = {};
@@ -143,6 +143,31 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		console.log('Exiting adding new job');
 	};
 	
+	$scope.updateJob = function(){
+		
+		console.log('Saving edited job');
+		
+		$ionicBackdrop.retain();
+		
+		ScheduledJobsService.updateJob($scope.jobInfo).then(function(data){
+			
+			if(data.hasOwnProperty('error')){
+				if(data.error === 'true'){
+					alert(data.message);
+				}else{
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.jobs');
+				}
+			}
+			
+			$ionicBackdrop.release();
+		});
+		
+		console.log('Exiting updating job');
+	};
+	
 	$scope.deleteJob = function(jobId){
 		
 		var job = ScheduledJobsService.get(jobId);
@@ -197,9 +222,9 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 	};
 	
 	$scope.$on('$ionicView.beforeEnter', function () {
-		
+
 		var $currState = $ionicHistory.currentView().stateId;
-		
+
 		if($currState == 'app.jobs'){
 			
 			console.log('Loading jobs data.');
@@ -208,6 +233,16 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 				$scope.scheduledJobs = data;
 			});
 			//console.log('# of jobs returned: ' + $scope.scheduledJobs.length);
+		}else if ($currState.indexOf('app.editJob') >= 0){
+			
+			//dirty hack until i figure why state params is not working..
+			var jobId = $currState.split('=')[1];
+			
+			ScheduledJobsService.list().then(function(data){
+				
+				$scope.jobInfo = ScheduledJobsService.get(jobId);
+				console.log(JSON.stringify($scope.jobInfo));
+			});
 		}
 	});
 

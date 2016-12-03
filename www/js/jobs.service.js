@@ -27,7 +27,7 @@ angular.module('starter.services.jobs', ['starter.services.settings'])
 
     get : function(jobId) {
       for (var i = 0; i < jobs.length; i++) {
-        if (jobs[i].id === jobId) {
+        if (jobs[i].id == jobId) {
           return jobs[i];
         }
       }
@@ -61,6 +61,24 @@ angular.module('starter.services.jobs', ['starter.services.settings'])
 				},
 				function(response){
 					console.log('Error invoking service for adding new job');
+					return response;
+				}
+			)
+		)
+    },
+	
+	updateJob : function(jobData) {
+		
+		console.log('Updating job : ' + JSON.stringify(jobData));
+		
+		return (
+			$http.post(this.getBaseUrl() + "/updateJob", jobData, {timeout: 2000})
+			.then(
+				function(response){
+					return response.data;
+				},
+				function(response){
+					console.log('Error invoking service for updating job');
 					return response;
 				}
 			)

@@ -18,7 +18,7 @@
 			<div class="button-bar">
 			  <a class="button button-assertive icon-left ion-android-delete" ng-click="deleteJob(job.id)">Delete</a>
 			  <a class="button button-dark icon-left ion-clipboard" ng-click="copyToClipboard('{{job.cronSchedule}}')">Copy</a>
-			  <a class="button button-energized icon-left ion-edit">Edit</a>
+			  <a class="button button-energized icon-left ion-edit" ui-sref="app.editJob({id:job.id})">Edit</a>
 			</div>
 		</div>
 	</div>

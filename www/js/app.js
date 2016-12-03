@@ -183,6 +183,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
       }
     })
 	
+	.state('app.editJob', {
+      url: '/editJob/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/jobs/edit.html'
+        }
+      }
+    })
+	
 	.state('settings', {
 		url: '/settings',
 		abstract: true,

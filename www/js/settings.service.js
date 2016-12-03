@@ -5,7 +5,6 @@ angular.module('starter.services.settings',[])
 	
     getBrokerInfo : function() {
 		storedData = window.localStorage.getItem('brokerInfo');
-		console.log('stored data: ' + storedData);
 		return JSON.parse(storedData);
     },
 
