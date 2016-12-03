@@ -10,12 +10,7 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 	$scope.scheduledJobs = [];
 	$scope.jobInfo = {};
 	
-	//chart data
-	$scope.labels = [];
-	$scope.data = [
-		[]
-	];
-	$scope.series = ['W/hr'];
+	
 
 	$scope.toggleBrokerConnection = function(){
 
@@ -67,7 +62,7 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 
 		$ionicPopup.alert({
 			title: 'Connection',
-			template: 'Operation completed successfully.'
+			template: 'Connected to MQTT Broker.'
 		});
 
 	});
@@ -79,31 +74,12 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 
 	    $ionicPopup.alert({
 			title: 'Connection',
-			template: 'Operation completed successfully.'
+			template: 'Disconnected from MQTT Broker.'
 		});
 
 	});
 	
-	$scope.$on('mqtt-message-arrival', function(event, args) {
-		
-		if(args.destinationName == 'fromPowerMon'){
-			var currentDate = new Date();
-			
-			if($scope.labels.length > 10){
-				$scope.labels.shift();
-				$scope.data[0].shift();
-			}
-			
-			$scope.labels.push('' + currentDate.getHours() + ":" + currentDate.getMinutes());
-			$scope.data[0].push(Number(args.payload));
-			//$scope.data[1].push(Number(args.payload)/1000);
-			
-			//console.log('data' + JSON.stringify($scope.data));
-			//console.log('labels' + JSON.stringify($scope.labels));
-			
-			$scope.$apply();
-		}
-	});
+	
 	
 	$scope.reloadJobData = function(){
 		$ionicBackdrop.retain();
@@ -278,6 +254,46 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		if($currState == 'settings.mqbroker'){
 			$scope.brokerInfo = SettingsService.getBrokerInfo();
 		};
+	});
+
+})
+
+.controller('PowermonCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, SettingsService, $cordovaInAppBrowser) {
+
+	//chart data
+	$scope.labels = [];
+	$scope.data = [
+		[]
+	];
+	$scope.series = ['W/hr'];
+	
+	$scope.$on('mqtt-message-arrival', function(event, args) {
+		
+		if(args.destinationName == 'fromPowerMon'){
+			var currentDate = new Date();
+			
+			if($scope.labels.length > 10){
+				$scope.labels.shift();
+				$scope.data[0].shift();
+			}
+			
+			$scope.labels.push('' + currentDate.getHours() + ":" + currentDate.getMinutes());
+			$scope.data[0].push(Number(args.payload));
+			
+			$scope.$apply();
+		}
+	});
+
+	$scope.$on('$ionicView.beforeEnter', function () {
+		
+		$scope.connectMQTT();	
+		
+	});
+
+	$scope.$on('$ionicView.beforeLeave', function () {
+		
+		$scope.disconnectMQTT();
+		
 	});
 
 })

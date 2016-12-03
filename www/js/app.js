@@ -147,7 +147,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
 	$httpProvider.defaults.headers.patch = {};
 	
   $stateProvider
-
+  
   .state('app', {
     url: '/app',
     abstract: true,
@@ -204,6 +204,22 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
       views: {
         'menuContent': {
           templateUrl: 'templates/settings/mqbroker.html'
+        }
+      }
+    })
+	
+	.state('powermon', {
+		url: '/powermon',
+		abstract: true,
+		templateUrl: 'templates/menu.html',
+		controller: 'PowermonCtrl'
+	})
+	
+	.state('powermon.dashboard', {
+      url: '/dashboard',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/powermon/dashboard.html'
         }
       }
     })
