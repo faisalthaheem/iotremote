@@ -3,10 +3,7 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaDevice, $ionicPopup, $state, $ionicHistory, $ionicBackdrop, ScheduledJobsService, SettingsService, $cordovaInAppBrowser, $cordovaClipboard, $cordovaToast, $stateParams) {
 
 	//form data for devices
-	$scope.deviceStates = {};
-	$scope.deviceStatesText = {};
-	$scope.deviceStatesText.brokerState = "disconnected";
-	$scope.deviceStatesText.pumpState = "off";
+	
 	$scope.scheduledJobs = [];
 	$scope.jobInfo = {};
 	
@@ -23,61 +20,8 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		}
 	};
 
-	$scope.togglePumpState = function(){
 
-		var message = 'off';
-		if( $scope.deviceStates.pump == true ){
-			message = 'on';
-		}
-		
-		if( false == $scope.sendMQTTMessage('toPump', message) ){
-			//unable to send message for any reason
-			$scope.deviceStates.pump = false;
-			$scope.deviceStatesText.pumpState = "off";
-		}else{
-			if( $scope.deviceStates.pump == true ){
-				$scope.deviceStatesText.pumpState = "on";
-			}else{
-				$scope.deviceStatesText.pumpState = "off";
-			}
-		}
-	};
-
-	$scope.$on('mqtt-connect-failure', function(event, args) {
-
-		$ionicBackdrop.release();
-		$scope.deviceStatesText.brokerState = "disconnected";
-
-		$ionicPopup.alert({
-			title: 'Connection',
-			template: 'Unable to connect, please try again later.'
-		});
-
-	});
-
-	$scope.$on('mqtt-connect-success', function(event, args) {
-
-		$ionicBackdrop.release();
-		$scope.deviceStatesText.brokerState = "connected";
-
-		$ionicPopup.alert({
-			title: 'Connection',
-			template: 'Connected to MQTT Broker.'
-		});
-
-	});
-
-	$scope.$on('mqtt-disconnect-success', function(event, args) {
-
-		$ionicBackdrop.release();
-		$scope.deviceStatesText.brokerState = "disconnected";
-
-	    $ionicPopup.alert({
-			title: 'Connection',
-			template: 'Disconnected from MQTT Broker.'
-		});
-
-	});
+	
 	
 	
 	
@@ -284,16 +228,86 @@ angular.module('starter.controllers', ['starter.services.jobs','starter.services
 		}
 	});
 
-	$scope.$on('$ionicView.beforeEnter', function () {
+	$scope.$on('$ionicView.enter', function () {
 		
 		$scope.connectMQTT();	
 		
 	});
 
-	$scope.$on('$ionicView.beforeLeave', function () {
+	$scope.$on('$ionicView.leave', function () {
 		
 		$scope.disconnectMQTT();
 		
 	});
+
+})
+
+
+.controller('ControlCtrl', function($scope, $state, $cordovaToast) {
+
+	$scope.deviceStates = {};
+	$scope.deviceStatesText = {};
+	$scope.deviceStatesText.brokerState = "disconnected";
+	$scope.deviceStatesText.pumpState = "off";
+	
+	$scope.$on('$ionicView.enter', function () {
+		
+		$scope.connectMQTT();	
+		
+	});
+
+	$scope.$on('$ionicView.leave', function () {
+		
+		$scope.disconnectMQTT();
+		
+	});
+	
+	$scope.togglePumpState = function(){
+
+		var message = 'off';
+		if( $scope.deviceStates.pump == true ){
+			message = 'on';
+		}
+		
+		if( false == $scope.sendMQTTMessage('toPump', message) ){
+			//unable to send message for any reason
+			$scope.deviceStates.pump = false;
+			$scope.deviceStatesText.pumpState = "off";
+		}else{
+			if( $scope.deviceStates.pump == true ){
+				$scope.deviceStatesText.pumpState = "on";
+			}else{
+				$scope.deviceStatesText.pumpState = "off";
+			}
+		}
+	};
+	
+	$scope.$on('mqtt-connect-success', function(event, args) {
+
+		$scope.deviceStatesText.brokerState = "connected";
+
+		$cordovaToast
+			.show('Connected to MQTT Broker', 'long', 'center');
+
+	});
+
+	$scope.$on('mqtt-disconnect-success', function(event, args) {
+
+		$scope.deviceStatesText.brokerState = "disconnected";
+
+	    $cordovaToast
+			.show('Disconnected from MQTT Broker', 'long', 'center');
+
+	});
+	
+	$scope.$on('mqtt-connect-failure', function(event, args) {
+
+		$scope.deviceStatesText.brokerState = "disconnected";
+
+		$cordovaToast
+			.show('Unable to connect/Disconnected', 'long', 'center');
+
+	});
+
 
 })

@@ -223,6 +223,22 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova', 'starter.
         }
       }
     })
+	
+	.state('control', {
+		url: '/control',
+		abstract: true,
+		templateUrl: 'templates/menu.html',
+		controller: 'ControlCtrl'
+	})
+	
+	.state('control.dashboard', {
+      url: '/dashboard',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/control/dashboard.html'
+        }
+      }
+    })
 	;
 
   // if none of the above states are matched, use this as the fallback
